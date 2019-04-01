@@ -21,7 +21,7 @@ softm=4;
 soft=10;
 smo=5;
 
-del=0.6;% delay between data collection
+del=0.5;% delay between data collection
 for j=1:no_act
     tar(j,1)=randi([act_range(1,j),act_range(2,j)]); %target to reach in the actutator space
     % I use RANDI for easier communication
@@ -145,40 +145,38 @@ try
     
     
     % get some data using TX..
-    
+  %%  
     Counter = 1;
     pk=randi(2000);
     pdis=30;
+    
+
+    
+    
 %     
-     target(1,1:pdis)=200*ones(pdis,1);
+     target(1,1:pdis)=150*ones(pdis,1);
  target(2,1:pdis)=linspace(-150,150,pdis);
- target(3,1:pdis)=-400*ones(pdis,1);
+ target(3,1:pdis)=-450*ones(pdis,1);
  
-      target(1,pdis+1:2*pdis)=linspace(200,70,pdis);
+      target(1,pdis+1:2*pdis)=linspace(150,150,pdis);
  target(2,pdis+1:2*pdis)=150*ones(pdis,1);
- target(3,pdis+1:2*pdis)=linspace(-400,-250,pdis);
+ target(3,pdis+1:2*pdis)=linspace(-450,-250,pdis);
  
-      target(1,2*pdis+1:3*pdis)=70*ones(pdis,1);
+      target(1,2*pdis+1:3*pdis)=150*ones(pdis,1);
  target(2,2*pdis+1:3*pdis)=linspace(150,-150,pdis);
  target(3,2*pdis+1:3*pdis)=-250*ones(pdis,1);
  
-      target(1,3*pdis+1:4*pdis)=linspace(70,200,pdis);
+      target(1,3*pdis+1:4*pdis)=linspace(150,150,pdis);
  target(2,3*pdis+1:4*pdis)=-150*ones(pdis,1);
- target(3,3*pdis+1:4*pdis)=linspace(-250,-400,pdis);
+ target(3,3*pdis+1:4*pdis)=linspace(-250,-450,pdis);
 %  
 % 
 %  target(:,4*pdis+1:8*pdis)=target(:,:);
     while Counter<Samps
         % tx
         
-        
-             if mod(Counter,200)==0
-                pk=randi(3000);
-            end
-        %target(:,Counter)=posi(:,pk);
-        %targeto(:,Counter)=sin(Counter/20);
-        %targeto(:,Counter)=0;
-        targeto(:,Counter)=[0*sin(Counter/10),0*sin(Counter/10)];
+         targeto(:,Counter)=[1,sin(Counter/20)];
+
         
         fprintf(aurora, 'TX 0001');
         %fprintf(aurora, 'TX 1001');
@@ -189,7 +187,7 @@ try
         if strcmp(s(5:11), 'MISSING')
             %whole(:,i)=NaN;
             posnow(Counter,1:3)=0;
-            orinow(Counter,1:3)=0;
+          %  orinow(Counter,1:3)=0;
         else
             [waste,whole(:,Counter)]=NDIAuroraPoseOrientation((reply));
             
@@ -207,56 +205,22 @@ try
                     posnow(Counter,j)=(posnow(Counter,j)-500*sign(posnow(Counter,j)))/4;
                 end
             end
-            whole(Counter).orientation=normr(whole(Counter).orientation);
-            quatori(Counter,:)= whole(Counter).orientation;
-            [orinow(Counter,1),orinow(Counter,2),orinow(Counter,3)]=quat2angle(whole(Counter).orientation);
+          %  whole(Counter).orientation=normr(whole(Counter).orientation);
+           % quatori(Counter,:)= whole(Counter).orientation;
+         %   [orinow(Counter,1),orinow(Counter,2),orinow(Counter,3)]=quat2angle(whole(Counter).orientation);
             
         end
         
         
-        
-        orivec(:,Counter)=[sin(orinow(Counter,3))*cos(orinow(Counter,2)),sin(orinow(Counter,2)),cos(orinow(Counter,3))*cos(orinow(Counter,2))];
-        
-        if Counter==1
-            jacd(:,:)=zeros(6,8);
-            jacdp(:,:)=zeros(6,6);
-        else
-           for kk=1:8
-             asd(:,1)=inim([1:8],Counter);
-             asd(kk,1)=inim(kk,Counter)+10;
-             jacd(:,kk)=net([inim(1:8,Counter);ini(1:6,Counter);posnow(Counter,[1:3])';orivec([1:3],Counter); asd(:,1);ini(1:6,Counter)])-[posnow(Counter,[1:3])';orivec([1:3],Counter)];
-           end
-            for kk=1:6
-             asdp(:,1)=ini([1:6],Counter);
-             asdp(kk,1)=inim(kk,Counter)+20;
-             jacdp(:,kk)=net([inim(1:8,Counter);ini(1:6,Counter);posnow(Counter,[1:3])';orivec([1:3],Counter);inim(1:8,Counter); asdp(:,1)])-[posnow(Counter,[1:3])';orivec([1:3],Counter)];
-           end
-        end
-        
-        errpos=[target(:,Counter)-posnow(Counter,[1:3])';0;0;0];
+           
         
        %comp=net([inim([1:8],Counter);ini([1:6],Counter);target(1:3,Counter);posnow(Counter,1:3)';targeto(1,Counter);orivec(3,Counter)]);
-       %comp=net([inim([1:8],Counter);ini([1:6],Counter);target(1:3,Counter);posnow(Counter,1:3)']);
-        % comp=net([inim([1:8],Counter);ini([1:6],Counter);target([1:3],Counter);posnow(Counter,[1:3])';targeto(:,Counter);orivec([2,3],Counter)]);
-       
-       
-       %comp=net([inim([1:8],Counter);ini([1:6],Counter);target([1,3],Counter);posnow(Counter,[1,3])';targeto(1,Counter);orivec(3,Counter)]);
-   
-         
-        ini(:,Counter+1) =act_range(1,:);%initial pressure of cambers
-        inim(:,Counter+1) =act_rangem(1,:);
+       comp=net([target(1:3,Counter)]);
+
+        ini([1:3],Counter+1)=comp(1:end);
         
-        inim([1:8],Counter+1)=inim([1:8],Counter)+1*pinv(jacd)*errpos;
-        ini([1:6],Counter+1)=ini([1:6],Counter)+1*pinv(jacdp)*errpos;
-        
-        for jj=1:9
-            if  inim(jj,Counter+1)<act_rangem(1,jj)
-                inim(jj,Counter+1)=act_rangem(1,jj);
-            end
-            
-            if  inim(jj,Counter+1)>act_rangem(2,jj)
-                inim(jj,Counter+1)=act_rangem(2,jj);
-            end
+        for jj=1:3
+
             
             if  ini(jj,Counter+1)<act_range(1,jj)
                 ini(jj,Counter+1)=act_range(1,jj);
@@ -278,9 +242,8 @@ try
         end
         
         pause(del)
-        hop=orivec(:,Counter);
-      %  err(1,Counter)=rssq(target(1:3,Counter)-posnow(Counter,1:3)');
-         err=rssq(target(1:3,Counter)-posnow(Counter,1:3)')
+        hop=orivec(:,Counter)
+        err(1,Counter)=rssq(target(1:3,Counter)-posnow(Counter,1:3)');
         Counter=Counter+1
         
     end
