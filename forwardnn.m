@@ -3,22 +3,22 @@
 %have to use twice to create two networks
 
 %n=length(posi);
-hiddenLayerSize =[40];
+hiddenLayerSize =[80];
 n=length(posi);
 %x=[inim(1:8,1:n-1);ini(1:6,1:n-1);posi(1:3,2:n);posi(1:3,1:n-1)];
 
 %x=[inim(1:8,1:n-1);ini(1:6,1:n-1);posi(1:3,2:n);posi(1:3,1:n-1);oriv2(3,2:n);oriv2(3,1:n-1)];
 
 %x=[inim(1:8,1:n-1);ini(1:6,1:n-1);posi([1,3],2:n);posi([1,3],1:n-1);oriv2([2,3],2:n);oriv2([1,3],1:n-1)];
-x=[inim(1:8,1:n-1);ini(1:6,1:n-1);posi([1:3],2:n);posi([1:3],1:n-1);oriv2([2,3],2:n);oriv2([2,3],1:n-1)];
+x=[inim(1:8,1:n-1);ini(1:6,1:n-1);posi([1:3],1:n-1);oriv2([1:3],1:n-1);inim(1:8,2:n);ini(1:6,2:n)];
 
 %output
-t =[inim(1:8,2:n);ini(1:6,2:n)];
+t =[posi([1:3],2:n);oriv2([1:3],2:n)];
 
 
 
 
-trainFcn = 'trainbr';  % training algorithm 
+trainFcn = 'trainlm';  % training algorithm 
 
 
 
