@@ -1,0 +1,10 @@
+<!-- saved from url=(0014)about:internet -->
+<pre class="code">
+<span class="srcline"><span class="lineno"><a href="1,65" id="srcline65">65</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="1,66" id="srcline66">66</a></span><span class="line"><span class="comment">% Map Minimum and Maximum Output Reverse-Processing Function</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,67" id="srcline67">67</a></span><span class="line"><span class="keyword">function</span> <span class="var type1" id="S32T1U1687">x</span> = mapminmax_reverse(<span class="var type1" id="S33T1U1690">y</span>,<span class="var type1" id="S34T8U1691">settings</span>)</span></span>
+<span class="srcline"><span class="lineno"><a href="1,68" id="srcline68">68</a></span><span class="line">  <span class="mxinfo " id="T1:U4"><span class="var type1" id="S32T1U1694">x</span> = <span class="mxinfo " id="T1:U6">bsxfun(@minus,<span class="var type1" id="S33T1U1699">y</span>,<span class="mxinfo " id="T4:U8"><span class="var type1" id="S34T8U1701">settings</span>.ymin</span>)</span></span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="1,69" id="srcline69">69</a></span><span class="line">  <span class="mxinfo " id="T1:U10"><span class="var type1" id="S32T1U1705">x</span> = <span class="mxinfo " id="T1:U12">bsxfun(@rdivide,<span class="var type1" id="S32T1U1710">x</span>,<span class="mxinfo " id="T1:U14"><span class="var type1" id="S34T8U1712">settings</span>.gain</span>)</span></span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="1,70" id="srcline70">70</a></span><span class="line">  <span class="mxinfo " id="T1:U16"><span class="var type1" id="S32T1U1716">x</span> = <span class="mxinfo " id="T1:U18">bsxfun(@plus,<span class="var type1" id="S32T1U1721">x</span>,<span class="mxinfo " id="T1:U20"><span class="var type1" id="S34T8U1723">settings</span>.xoffset</span>)</span></span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="1,71" id="srcline71">71</a></span><span class="line"><span class="keyword">end</span></span></span>
+</pre>
