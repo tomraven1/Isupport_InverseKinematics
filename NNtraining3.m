@@ -10,10 +10,13 @@ n=length(posi);
 %x=[inim(1:8,1:n-1);ini(1:6,1:n-1);posi(1:3,2:n);posi(1:3,1:n-1);oriv2(3,2:n);oriv2(3,1:n-1)];
 
 %x=[inim(1:8,1:n-1);ini(1:6,1:n-1);posi([1,3],2:n);posi([1,3],1:n-1);oriv2([2,3],2:n);oriv2([1,3],1:n-1)];
-x=[inim(1:8,1:n-1);ini(1:6,1:n-1);posi([1:3],2:n);posi([1:3],1:n-1);oriv2([2,3],2:n);oriv2([2,3],1:n-1)];
+%x=[inim(1:8,1:n-1);ini(1:6,1:n-1);posi([1:3],2:n);posi([1:3],1:n-1);oriv2([2,3],2:n);oriv2([2,3],1:n-1)];
+
+
+x=[posi([1:3],2:n)];
 
 %output
-t =[inim(1:8,2:n);ini(1:6,2:n)];
+t =[ini(1:3,2:n)];
 
 
 
